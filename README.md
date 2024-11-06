@@ -359,4 +359,9 @@ c5ff2d88f679: Mounted from library/ubuntu
 latest: digest: sha256:6e49841ad9e720a7baedcd41f9b666fcd7b583151d0763fe78101bb8221b1d88 size: 1157
 ```
 
+TO reduce the image size - 
+**Multi-stage builds** allow you to use one stage for building dependencies (like compiling source code or installing large libraries) and another for the final image, which only includes the artifacts you need to run the application.
+
+https://youtube.com/watch?v=yyJrZgoNal0&t=82s
+
 ### You must be feeling like a champ already 
