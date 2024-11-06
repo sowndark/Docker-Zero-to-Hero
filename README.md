@@ -364,4 +364,7 @@ TO reduce the image size -
 
 https://youtube.com/watch?v=yyJrZgoNal0&t=82s
 
+
+to create dockerfile automatically - https://www.youtube.com/watch?v=Y5HQmgTNAtw&list=PLdpzxOOAlwvLjb0vTD9BXLOwwLD_GWCmC&index=10
+
 ### You must be feeling like a champ already 
