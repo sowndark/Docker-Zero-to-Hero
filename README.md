@@ -368,3 +368,66 @@ https://youtube.com/watch?v=yyJrZgoNal0&t=82s
 to create dockerfile automatically - https://www.youtube.com/watch?v=Y5HQmgTNAtw&list=PLdpzxOOAlwvLjb0vTD9BXLOwwLD_GWCmC&index=10
 
 ### You must be feeling like a champ already 
+### Which One to Use COPY vs ADD?
+* Use COPY when you just want to copy files or directories from your build context into the container. It’s more explicit and predictable.
+* Use ADD when you need the special behavior, like extracting archives or downloading from URLs. But be cautious—this added functionality can sometimes lead to unintended behavior, so it’s best to use it only when necessary.
+
+### When to Use ENTRY POINT VS CMD :
+* Use ENTRYPOINT when you want to set a fixed command that should always run, regardless of how the container is started.
+* USE CMD : Defines the default arguments or command to run, but it can be overridden when running the container.
+
+### BindMounts vs volume 
+
+1. Bind Mounts
+A bind mount allows you to mount a specific file or directory from your host system into a container. Changes to files in the mounted directory or file on the host are reflected in the container and vice versa.
+
+Key Characteristics of Bind Mounts:
+* Host path-based: You specify an absolute path from the host machine to bind it to the container.
+* Direct link to host filesystem: Changes made on the host filesystem are directly reflected inside the container and vice versa.
+* Can be any file or directory: You can mount any file or directory on the host system (not just Docker-specific locations).
+* Not managed by Docker: Bind mounts are managed by the host's filesystem. Docker doesn't control or organize them.
+
+Use Cases for Bind Mounts:
+* When you need to share specific files or directories from the host with the container.
+* Commonly used for development workflows where source code or configuration files are mounted into containers.
+* Useful for debugging, where you need live access to logs or other dynamic data.
+
+2. Volumes
+A volume is a Docker-managed storage area, typically stored in a special Docker directory (/var/lib/docker/volumes on Linux). Volumes are fully managed by Docker and are not tied to the host’s filesystem. Volumes provide a way to persist data across container restarts and allow easier backup and sharing of data between containers.
+
+Key Characteristics of Volumes:
+* Managed by Docker: Volumes are managed by Docker, and Docker ensures they are stored in a separate location on the host machine (not in the container filesystem).
+* Data persists across container restarts: Volumes are more resilient for persistent data. Even if a container is deleted, the volume data persists and can be reused by other containers.
+* Easier backups and sharing: Volumes can be backed up, restored, and shared between containers.
+* Not tied to a specific host directory: Docker abstracts away the underlying host directory, which gives more flexibility and makes the volume storage location independent of your host’s file system layout.
+
+Use Cases for Volumes:
+* When you need to persist data across container restarts or container removals.
+* When you need to share data between containers, such as a database container and an application container.
+* When you want Docker to manage your data storage, ensuring easier backup, restore, and portability.
+
+### Helath Check 
+In Docker, a health check is used to monitor the health status of a running container. It allows Docker to automatically check whether your application inside the container is still functioning correctly. If a container is unhealthy, Docker can take action (like restarting the container) based on the defined behavior.
+
+Why Use Health Checks?
+Automation: Health checks allow Docker to monitor the health of containers automatically without requiring manual intervention.
+Fault Detection: You can automatically detect when an application in a container becomes unresponsive or fails.
+Resilience: Health checks can help ensure your system stays running by automatically restarting unhealthy containers, making the system more resilient.
+
+
+Example:
+
+FROM nginx:alpine
+# Copy your configuration or content
+COPY ./index.html /usr/share/nginx/html/
+# Healthcheck: Check if the web server is responding on port 80
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD curl --fail http://localhost:80/ || exit 1
+
+Explanation:
+
+--interval=30s: Run the health check every 30 seconds.
+--timeout=5s: If the command takes more than 5 seconds, it will be considered a failure.
+--retries=3: If the health check fails 3 times consecutively, the container will be marked as unhealthy.
+CMD curl --fail http://localhost:80/ || exit 1: This checks if the web server is responding to HTTP requests on port 80. If the request fails (e.g., due to the server not responding), the container is considered unhealthy.
+
